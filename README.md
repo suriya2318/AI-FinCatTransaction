@@ -74,6 +74,16 @@ Stores user-corrected labels into feedback.csv to continuously refine and improv
 ### 9. Retraining Capability 
 Allows new training sessions that incorporate user feedback, enabling adaptive and ever-improving performance.
 
+## 4. Data Model & Storage
 
+•	Processed Dataset – The cleaned and vector-ready transaction dataset is stored at data/processed/processed.csv for training and evaluation.
+
+•	Feedback Storage – User-submitted corrections are logged in data/feedback/feedback.csv to enable continuous model improvement.
+
+•	Taxonomy Definition – All category names and IDs are defined in configs/taxonomy.yaml, allowing full admin control without code changes.
+
+•	Model Artifacts – Trained ML models and vectorizers are saved in artifacts/models/ for reproducible inference and retraining.
+
+•	Evaluation Artifacts – Metrics such as confusion matrices and classification reports are stored in artifacts/metrics/ for transparent performance analysis.
 
 
