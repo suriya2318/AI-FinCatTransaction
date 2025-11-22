@@ -86,4 +86,25 @@ Allows new training sessions that incorporate user feedback, enabling adaptive a
 
 •	Evaluation Artifacts – Metrics such as confusion matrices and classification reports are stored in artifacts/metrics/ for transparent performance analysis.
 
+## 5. AI / ML Components 
+
+### 1. Vectorization: TF-IDF
+
+Converts raw transaction text into numerical feature vectors by capturing word importance across the dataset.
+
+### 2. Model: Linear Support Vector Machine
+
+A fast and highly accurate linear classifier used to predict the correct transaction category based on vectorized features.
+
+### 3. Performance (Macro F1 Score: 0.9969, Accuracy: 0.9969)
+
+Demonstrates business grade classification performance on the evaluation dataset, exceeding the required 0.90 macro F1 target.
+
+### 4. Evaluation Artifacts: confusion_matrix.png
+
+Provides a visual representation of true vs. predicted categories for transparency and error analysis.
+
+### 5. Evaluation Artifacts: classification_report.json
+
+Stores detailed per class precision, recall, and F1 metrics for reproducible evaluation and auditing.
 
