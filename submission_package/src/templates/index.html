@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Transaction Categoriser — Demo</title>
+
+    <!-- Bootstrap 5 CSS (CDN) -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-900: #111827;
+      }
+
+      body {
+        background-color: var(--gray-50);
+        color: var(--gray-900);
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        line-height: 1.6;
+        padding: 0;
+        margin: 0;
+      }
+
+      .app-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--gray-200);
+      }
+
+      .app-title {
+        font-weight: 700;
+        font-size: 2.25rem;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.025em;
+      }
+
+      .app-subtitle {
+        color: var(--gray-600);
+        font-size: 1.125rem;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .card {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid var(--gray-200);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+      }
+
+      .card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .card-header {
+        background: transparent;
+        border-bottom: 1px solid var(--gray-200);
+        padding: 1.25rem 1.5rem;
+        font-weight: 600;
+        color: var(--gray-900);
+      }
+
+      .card-body {
+        padding: 1.5rem;
+      }
+
+      .btn-primary {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        font-weight: 500;
+        padding: 0.625rem 1.5rem;
+        border-radius: 8px;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--primary-dark);
+        border-color: var(--primary-dark);
+      }
+
+      .btn-outline-secondary {
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 0.625rem 1.5rem;
+      }
+
+      .prediction-badge {
+        display: inline-block;
+        background: var(--primary);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.125rem;
+        margin: 0.5rem 0;
+      }
+
+      .confidence-meter {
+        height: 8px;
+        background: var(--gray-200);
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 1rem 0;
+      }
+
+      .confidence-fill {
+        height: 100%;
+        background: var(--primary);
+        border-radius: 4px;
+        transition: width 0.5s ease;
+      }
+
+      .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .feature-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--gray-100);
+      }
+
+      .feature-item:last-child {
+        border-bottom: none;
+      }
+
+      .feature-name {
+        font-weight: 500;
+        color: var(--gray-700);
+      }
+
+      .feature-score {
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      .input-group {
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .form-control,
+      .form-select {
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--gray-200);
+      }
+
+      .form-control:focus,
+      .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .demo-badge {
+        display: inline-flex;
+        align-items: center;
+        background: var(--gray-100);
+        color: var(--gray-700);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-top: 1rem;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .feature-card {
+        background: var(--gray-50);
+        border-radius: 8px;
+        padding: 1rem;
+        border-left: 4px solid var(--primary);
+      }
+
+      .feature-card h6 {
+        margin-bottom: 0.5rem;
+        color: var(--gray-900);
+      }
+
+      .feature-card p {
+        margin: 0;
+        color: var(--gray-600);
+        font-size: 0.875rem;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--gray-200);
+        color: var(--gray-600);
+        font-size: 0.875rem;
+      }
+
+      @media (max-width: 768px) {
+        .app-container {
+          padding: 1rem;
+        }
+
+        .app-title {
+          font-size: 1.75rem;
+        }
+
+        .feature-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Header -->
+      <div class="header">
+        <h1 class="app-title">Transaction Categorizer</h1>
+        <p class="app-subtitle">
+          Automatically classify transactions with explainable AI and human
+          feedback integration
+        </p>
+        <div class="demo-badge">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-laptop me-2"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M13.5 3a.5.5 0 0 1 .5.5V11H2V3.5a.5.5 0 0 1 .5-.5h11zm-11-1A1.5 1.5 0 0 0 1 3.5V12h14V3.5A1.5 1.5 0 0 0 13.5 2h-11zM0 12.5h16a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5z"
+            />
+          </svg>
+          Local Demo • No External APIs
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Left Column: Input & Results -->
+        <div class="col-lg-6">
+          <!-- Input Card -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Test the Categorizer</h5>
+            </div>
+            <div class="card-body">
+              <form method="post">
+                <div class="mb-3">
+                  <label for="transactionInput" class="form-label"
+                    >Transaction Description</label
+                  >
+                  <textarea
+                    class="form-control"
+                    id="transactionInput"
+                    name="transaction"
+                    rows="3"
+                    placeholder="e.g. STARBUCKS STORE #45, AMAZON PURCHASE, SHELL GAS STATION"
+                  >
+{{ text or '' }}</textarea
+                  >
+                </div>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-primary" type="submit">
+                    Categorize Transaction
+                  </button>
+                  <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    onclick="location.href='/'"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Results Card -->
+          {% if text %}
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Classification Results</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label">Input Text</label>
+                <div class="p-3 bg-light rounded">
+                  <code class="fs-6">{{ text }}</code>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label">Predicted Category</label>
+                <div class="prediction-badge">{{ pred }}</div>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label">Confidence Score</label>
+                <div class="d-flex justify-content-between mb-1">
+                  <span>0%</span>
+                  <span class="fw-bold">{{ "%.1f"|format(conf * 100) }}%</span>
+                  <span>100%</span>
+                </div>
+                <div class="confidence-meter">
+                  <div
+                    class="confidence-fill"
+                    style="width: {{ conf * 100 }}%"
+                  ></div>
+                </div>
+              </div>
+
+              <!-- Feedback Section -->
+              <div>
+                <label class="form-label">Provide Correction (Optional)</label>
+                <form method="post" id="feedbackForm">
+                  <input type="hidden" name="transaction" value="{{ text }}" />
+                  <div class="input-group mb-2">
+                    <select
+                      class="form-select"
+                      name="label_select"
+                      aria-label="Choose correct category"
+                    >
+                      <option value="" selected>
+                        Select correct category...
+                      </option>
+                      {% for cid, dname in categories %}
+                      <option value="{{ cid }}">{{ dname }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <button
+                    class="btn btn-outline-success w-100"
+                    name="save"
+                    type="submit"
+                  >
+                    Save Correction for Retraining
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Right Column: Explanation & Features -->
+        <div class="col-lg-6">
+          <!-- Explanation Card -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Explanation</h5>
+            </div>
+            <div class="card-body">
+              {% if text %}
+              <p class="text-muted mb-3">
+                Top features influencing this classification:
+              </p>
+
+              <canvas
+                id="explainChart"
+                style="max-height: 220px; width: 100%"
+              ></canvas>
+
+              <div class="mt-4">
+                <h6 class="mb-2">Feature Contributions</h6>
+                <ul class="feature-list">
+                  {% for f,s in expl %}
+                  <li class="feature-item">
+                    <span class="feature-name">{{ f }}</span>
+                    <span class="feature-score">{{ '%.4f'|format(s) }}</span>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% else %}
+              <div class="text-center py-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="48"
+                  height="48"
+                  fill="currentColor"
+                  class="bi bi-graph-up text-muted mb-3"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"
+                  />
+                </svg>
+                <p class="text-muted">
+                  Enter a transaction to see the explanation of how it was
+                  categorized.
+                </p>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Features Card -->
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">System Features</h5>
+            </div>
+            <div class="card-body">
+              <div class="feature-grid">
+                <div class="feature-card">
+                  <h6>Configurable Taxonomy</h6>
+                  <p>Easily modify categories in the configuration file</p>
+                </div>
+                <div class="feature-card">
+                  <h6>Local Processing</h6>
+                  <p>All processing happens locally, no external APIs</p>
+                </div>
+                <div class="feature-card">
+                  <h6>Explainable AI</h6>
+                  <p>Understand why each classification was made</p>
+                </div>
+                <div class="feature-card">
+                  <h6>Human Feedback</h6>
+                  <p>Corrections are stored for model improvement</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        © Transaction Categorizer Demo — Built for Local Deployment
+      </footer>
+    </div>
+
+    <!-- Chart.js (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <script>
+      // Chart data injected from Jinja variables
+      const labels = {{ (chart_labels | default([])) | tojson | safe }};
+      const scores = {{ (chart_scores | default([])) | tojson | safe }};
+
+      if (labels && labels.length) {
+        const ctx = document.getElementById('explainChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Feature contribution',
+              data: scores,
+              backgroundColor: 'rgba(37, 99, 235, 0.85)',
+              borderRadius: 6,
+              borderWidth: 0
+            }]
+          },
+          options: {
+            indexAxis: 'y',
+            scales: {
+              x: {
+                beginAtZero: true,
+                grid: {
+                  display: false
+                },
+                ticks: {
+                  precision: 2
+                }
+              },
+              y: {
+                grid: {
+                  display: false
+                }
+              }
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: 'rgba(17, 24, 39, 0.9)',
+                padding: 10,
+                cornerRadius: 8
+              }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

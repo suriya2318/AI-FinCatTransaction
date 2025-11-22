@@ -1,8 +1,8 @@
-# src/app.py (corrected)
+# src/app.py
 import sys
 import os
 
-# ensure repo root is on path (your project structure expects imports from src.*)
+# allow imports like `from src.infer import predict`
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from flask import Flask, request, render_template, redirect, url_for
@@ -10,25 +10,32 @@ import csv
 
 from src.infer import predict
 from src.explain import explain_text
-
-# import loader & helpers from taxonomy_lookup
 from src.taxonomy_lookup import get_all_categories, alias_lookup, load_taxonomy
 
 app = Flask(__name__)
+
 FEEDBACK_FILE = "data/feedback/feedback.csv"
 os.makedirs(os.path.dirname(FEEDBACK_FILE), exist_ok=True)
 
 
+def get_categories():
+    """
+    Returns list of tuples (category_id, display_name) for the UI.
+    """
+    return get_all_categories()
+
+
 @app.route("/", methods=["GET", "POST"])
 def index():
-    # categories is a list of tuples (id, display_name) used to render the dropdown in the template
-    categories = get_all_categories()
+    categories = get_categories()
+    alias_override = None
+
     if request.method == "POST":
         text = request.form.get("transaction", "").strip()
 
-        # If saving correction
+        # --- Save feedback flow ---
         if "save" in request.form:
-            # Accept multiple possible form fields (dropdown value, free text, legacy names)
+            # prefer dropdown value (category id) else free-text label
             posted_label = (
                 request.form.get("label_select")
                 or request.form.get("label")
@@ -37,10 +44,8 @@ def index():
             )
             posted_label = posted_label.strip()
 
-            # Normalize label to canonical category ID before writing
-            taxonomy = (
-                load_taxonomy()
-            )  # returns list of dicts with fields 'id' and 'display_name'
+            # Map posted label/display name to canonical id if possible
+            taxonomy = load_taxonomy()
             id_set = {c["id"] for c in taxonomy}
             display_to_id = {
                 (c.get("display_name") or "").strip().lower(): c["id"] for c in taxonomy
@@ -48,74 +53,60 @@ def index():
 
             label_to_write = posted_label
 
-            if label_to_write == "":
-                # nothing provided — write empty string (or you could reject)
-                label_to_write = ""
-            else:
-                # If user posted a numeric index (legacy), map to index in categories if possible
-                if label_to_write.isdigit():
-                    try:
-                        idx = int(label_to_write) - 1
-                        # ensure index within range
-                        if 0 <= idx < len(categories):
-                            label_to_write = categories[idx][0]  # cid
-                    except Exception:
-                        pass
-
-                # If label already an ID, keep it
-                if label_to_write in id_set:
+            # If numeric legacy index provided, map to categories list
+            if label_to_write.isdigit():
+                try:
+                    idx = int(label_to_write) - 1
+                    if 0 <= idx < len(categories):
+                        label_to_write = categories[idx][0]
+                except Exception:
                     pass
-                else:
-                    # Try to map from display name (case-insensitive)
-                    lower = label_to_write.lower()
-                    if lower in display_to_id:
-                        label_to_write = display_to_id[lower]
-                    else:
-                        # As a last resort: try to match by partial token to id keys (conservative)
-                        matched = None
-                        for c in taxonomy:
-                            if label_to_write.lower() == (c.get("id") or "").lower():
-                                matched = c["id"]
-                                break
-                        if matched:
-                            label_to_write = matched
-                        else:
-                            # keep as provided (this will create a custom/new label id)
-                            # Optionally you can reject this and ask user to pick from dropdown.
-                            label_to_write = label_to_write
 
-            # persist transaction text and canonical label id (not display name)
+            # If user submitted display name, map to id
+            if label_to_write and label_to_write not in id_set:
+                low = label_to_write.lower()
+                if low in display_to_id:
+                    label_to_write = display_to_id[low]
+
+            # Persist transaction text and canonical label id (or free text if unmatched)
             with open(FEEDBACK_FILE, "a", newline="", encoding="utf8") as f:
                 writer = csv.writer(f)
                 writer.writerow([text, label_to_write])
 
+            # After saving return to entry (GET index) so user can add next transaction
             return redirect(url_for("index"))
 
-        # Prediction flow
+        # --- Prediction flow ---
+        if not text:
+            # nothing to predict — just reload
+            return redirect(url_for("index"))
+
         out = predict([text], top_k=5)[0]
-        pred = out["pred"]
-        conf = out["conf"]
-        candidates = out.get("candidates")
+        pred = out.get("pred")
+        conf = out.get("conf", 0.0)
+        candidates = out.get("candidates", [])
         alias_override = out.get("alias_override")
 
-        # Explanations from your existing explain module (should return list of (feat, score) or (pred, conf, list))
+        # Explainability: expect explain_text to return list[(feat, score)] or (pred, conf, expl_list)
         expl = []
         try:
             maybe = explain_text(text)
-            # explain_text might return:
-            # 1) a list of (feat,score)
-            # 2) a tuple (pred, conf, [(feat,score), ...])
             if isinstance(maybe, list):
                 expl = maybe
-            elif isinstance(maybe, tuple) and len(maybe) >= 3:
-                expl = maybe[2] if isinstance(maybe[2], list) else []
+            elif (
+                isinstance(maybe, tuple)
+                and len(maybe) >= 3
+                and isinstance(maybe[2], list)
+            ):
+                expl = maybe[2]
             else:
-                # fallback: try to coerce to list
-                expl = list(maybe) if maybe else []
+                # try to coerce if possible
+                if hasattr(maybe, "__iter__"):
+                    expl = list(maybe)
         except Exception:
             expl = []
 
-        # normalize explanation entries into list of (feature, float_score)
+        # normalize explanation entries into (feature, float_score)
         norm_expl = []
         for item in expl or []:
             try:
@@ -126,10 +117,10 @@ def index():
                 score = 0.0
             norm_expl.append((feat, score))
 
-        # prepare chart labels if template uses them
         chart_labels = [f for f, s in norm_expl]
         chart_scores = [s for f, s in norm_expl]
 
+        # Render results template (index.html expects these variables)
         return render_template(
             "index.html",
             text=text,
@@ -143,7 +134,7 @@ def index():
             alias_override=alias_override,
         )
 
-    # GET
+    # GET request: show entry form
     return render_template(
         "index.html", categories=categories, chart_labels=[], chart_scores=[]
     )

@@ -8,7 +8,6 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-
     <style>
       * {
         margin: 0;
@@ -682,7 +681,7 @@
                     <!-- options are rendered server-side via Jinja -->
                     {% for cid, cname in categories %}
                     <option value="{{ cid }}">{{ cname }}</option>
-                    {% endfor %}
+                    {% endfor %}0
                   </select>
                 </div>
                 <button
@@ -846,9 +845,10 @@
         const words = transactionText.toUpperCase().split(/\s+/);
         const features = [];
 
-        // Common transaction patterns
+        // Common transaction patterns with more diverse categories
         const commonPatterns = {
           STARBUCKS: { score: 0.2456, category: "Food & Dining" },
+          COFFEE: { score: 0.2156, category: "Food & Dining" },
           AMAZON: { score: 0.3124, category: "Shopping" },
           SHELL: { score: 0.2876, category: "Transportation" },
           NETFLIX: { score: 0.2234, category: "Entertainment" },
@@ -862,6 +862,18 @@
           SPOTIFY: { score: 0.2189, category: "Entertainment" },
           COSTCO: { score: 0.289, category: "Shopping" },
           DOORDASH: { score: 0.2456, category: "Food & Dining" },
+          "GAS STATION": { score: 0.2765, category: "Transportation" },
+          RESTAURANT: { score: 0.2345, category: "Food & Dining" },
+          GROCERY: { score: 0.2678, category: "Food & Dining" },
+          PHARMACY: { score: 0.2234, category: "Healthcare" },
+          HOSPITAL: { score: 0.2987, category: "Healthcare" },
+          ELECTRIC: { score: 0.2456, category: "Utilities" },
+          WATER: { score: 0.2345, category: "Utilities" },
+          INTERNET: { score: 0.2678, category: "Utilities" },
+          MOVIE: { score: 0.2234, category: "Entertainment" },
+          CONCERT: { score: 0.2456, category: "Entertainment" },
+          HOTEL: { score: 0.2765, category: "Travel" },
+          AIRLINE: { score: 0.2987, category: "Travel" },
         };
 
         // Check for specific keywords
@@ -959,9 +971,42 @@
             }
           }
 
-          // If no specific category found, use a default
+          // If no specific category found, use a more intelligent default
           if (predictedCategory === "Other" && features.length > 0) {
-            predictedCategory = "Shopping"; // Default category
+            // Check for common patterns in the transaction text
+            const transactionUpper = transactionText.toUpperCase();
+            if (
+              transactionUpper.includes("COFFEE") ||
+              transactionUpper.includes("RESTAURANT") ||
+              transactionUpper.includes("FOOD")
+            ) {
+              predictedCategory = "Food & Dining";
+            } else if (
+              transactionUpper.includes("GAS") ||
+              transactionUpper.includes("FUEL") ||
+              transactionUpper.includes("TRAVEL")
+            ) {
+              predictedCategory = "Transportation";
+            } else if (
+              transactionUpper.includes("BILL") ||
+              transactionUpper.includes("UTILITY") ||
+              transactionUpper.includes("PAYMENT")
+            ) {
+              predictedCategory = "Utilities";
+            } else {
+              // Use a random category instead of always defaulting to Shopping
+              const categories = [
+                "Food & Dining",
+                "Shopping",
+                "Transportation",
+                "Entertainment",
+                "Utilities",
+                "Healthcare",
+                "Other",
+              ];
+              predictedCategory =
+                categories[Math.floor(Math.random() * categories.length)];
+            }
           }
 
           const randomConfidence = (Math.random() * 0.4 + 0.6).toFixed(3); // Between 0.6 and 1.0

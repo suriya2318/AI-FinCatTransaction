@@ -2,56 +2,56 @@
 import yaml
 import re
 from functools import lru_cache
-import os
-
-DEFAULT_PATH = os.path.join("configs", "taxonomy.yaml")
 
 
 @lru_cache()
-def load_taxonomy(path=DEFAULT_PATH):
-    """Load taxonomy YAML and return list of category dicts."""
+def load_taxonomy(path="configs/taxonomy.yaml"):
+    """
+    Returns list of category dicts with keys: id, display_name, aliases_norm
+    """
     with open(path, "r", encoding="utf8") as f:
-        tax = yaml.safe_load(f)
-    categories = tax.get("categories", [])
-    # normalize aliases and ensure fields
-    for c in categories:
-        c["id"] = str(c.get("id"))
-        c["display_name"] = c.get("display_name", c["id"])
-        c["aliases_norm"] = [
-            a.lower() for a in c.get("aliases", []) if isinstance(a, str)
-        ]
-    return categories
-
-
-def alias_lookup(text, path=DEFAULT_PATH):
-    """
-    Return (category_id, method) where method:
-      - 'token' for high-precision whole-word match
-      - 'substring' for conservative substring (aliases length >=4)
-      - (None, None) if no match
-    """
-    if not text:
-        return None, None
-    text_l = text.lower()
-    cats = load_taxonomy(path)
-    # high-precision: whole-word matches
+        raw = yaml.safe_load(f)
+    cats = raw.get("categories") or []
     for c in cats:
-        for a in c["aliases_norm"]:
-            if not a:
-                continue
-            # word boundary matching
-            pattern = r"\b" + re.escape(a) + r"\b"
-            if re.search(pattern, text_l):
-                return c["id"], "token"
-    # conservative substring match (only for aliases length >= 4 to avoid short collisions)
-    for c in cats:
-        for a in c["aliases_norm"]:
-            if len(a) >= 4 and a in text_l:
-                return c["id"], "substring"
-    return None, None
+        c["display_name"] = c.get("display_name", c.get("id"))
+        # normalize aliases to lowercase strings
+        c["aliases_norm"] = [str(a).lower() for a in c.get("aliases", []) if a]
+    return cats
 
 
-def get_all_categories(path=DEFAULT_PATH):
-    """Return list of tuples (id, display_name) for UI rendering"""
-    cats = load_taxonomy(path)
+def get_all_categories():
+    """
+    Return list of tuples (id, display_name) for UI lists.
+    """
+    cats = load_taxonomy()
     return [(c["id"], c["display_name"]) for c in cats]
+
+
+def alias_lookup(text):
+    """
+    Checks the taxonomy aliases and returns a tuple:
+      (category_id, method, matched_alias)
+    method: 'token' for token-exact match (high precision), 'substring' for substring match (lower precision)
+    matched_alias: the alias text that matched (lowercase)
+    Returns (None, None, None) if no match.
+    """
+    text_l = (text or "").lower()
+    if not text_l:
+        return None, None, None
+
+    tokens = re.split(r"\W+", text_l)
+    cats = load_taxonomy()
+
+    # token exact matches (best)
+    for c in cats:
+        for a in c["aliases_norm"]:
+            if a and a in tokens:
+                return c["id"], "token", a
+
+    # substring matches (fallback)
+    for c in cats:
+        for a in c["aliases_norm"]:
+            if a and a in text_l:
+                return c["id"], "substring", a
+
+    return None, None, None

@@ -1,0 +1,74 @@
+categories:
+  - id: groceries
+    display_name: Groceries
+    aliases: ["grocery", "supermarket", "market"]
+  - id: dining
+    display_name: Dining/Coffee
+    aliases:
+      [
+        "starbucks",
+        "cafe",
+        "restaurant",
+        "dining",
+        "Food",
+        "chicken",
+        "mutton",
+        "fish",
+      ]
+  - id: fuel
+    display_name: Fuel
+    aliases: ["gas", "shell", "bp", "exxon", "petrol", "diesel"]
+  - id: shopping
+    display_name: Shopping
+    aliases:
+      ["amazon", "walmart", "store", "retail", "clothes", "dress", "flipkart"]
+  - id: utilities
+    display_name: Utilities
+    aliases: ["electricity", "water", "gas bill", "utility"]
+  - id: other
+    display_name: Other
+    aliases: []
+  - id: coffee
+    display_name: Coffee & Cafes
+    aliases: ["starbucks", "coffee", "tea", "biskats", "samosa"]
+  - id: entertainment
+    display_name: Entertainment
+    aliases:
+      [
+        "movie",
+        "cinema",
+        "theatre",
+        "netflix",
+        "hulu",
+        "streaming",
+        "ticket",
+        "prime",
+        "hotstar",
+        "ott",
+      ]
+  - id: education
+    display_name: Education
+    aliases:
+      [
+        "school",
+        "university",
+        "tuition",
+        "course",
+        "online course",
+        "udemy",
+        "coursera",
+      ]
+  - id: healthcare
+    display_name: Healthcare
+    aliases:
+      [
+        "hospital",
+        "clinic",
+        "pharmacy",
+        "dental",
+        "doctor",
+        "healthcare",
+        "pharmacy",
+        "tablets",
+        "medicine",
+      ]
