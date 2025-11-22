@@ -174,8 +174,15 @@ Presents the model’s predicted category, confidence score, explanation chart, 
 <img width="1739" height="739" alt="Screenshot 2025-11-22 155934" src="https://github.com/user-attachments/assets/94aa332a-ba10-46c7-8705-9f30ffa21b73" />
 
 
+## 10. Project Demo
 
+### Demo Video Link
 
+This section provides the recorded walkthrough of the complete system, demonstrating model training, evaluation, the web interface, prediction workflow, and the feedback loop in action. Add your final video link here once recorded.
+
+## 11. Final Conclusion
+
+This AI powered Transaction Categorisation System delivers a fully automated, explainable, and extensible solution for classifying financial transactions with high accuracy. By combining a custom taxonomy, a robust ML model, transparent explainability, and a human feedback learning loop, the system enables organizations to reduce dependency on external APIs, lower operational costs, and maintain complete control over their data. Through local processing, configurable design, and continuous improvement capabilities, the project provides a scalable and reliable foundation for financial analytics, budgeting tools, and enterprise-grade categorisation workflows.
 
 
 
