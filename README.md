@@ -146,5 +146,8 @@ python main.py --mode all --run-server
 
 ### Home / Landing Page
 Shows the introductory interface where users access the system, understand its purpose, and begin the transaction categorization workflow.
+<img width="1888" height="907" alt="Screenshot 2025-11-22 155806" src="https://github.com/user-attachments/assets/63b451d3-a187-4e9b-b98b-2feb49f97436" />
+<img width="1894" height="920" alt="Screenshot 2025-11-22 155819" src="https://github.com/user-attachments/assets/75242b21-b092-4f38-8aaf-af4a1c8371a8" />
+
 
 
