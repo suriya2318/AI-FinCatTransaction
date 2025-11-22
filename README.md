@@ -22,4 +22,24 @@ The system includes:
 
 •	Web interface built with Flask
 
+## 2. Technology Stack
 
+•	Python 3.10 – The core programming language used to implement the entire machine learning pipeline and web application.
+
+•	Scikit-learn – Provides the ML algorithms and tools for training, evaluating, and deploying the transaction categorization model.
+
+•	TF-IDF Vectorizer – Converts raw transaction text into numerical feature vectors used by the machine learning model.
+
+•	Linear Support Vector Machine (SVM) – The main classification algorithm that predicts transaction categories with high accuracy.
+
+•	Pandas & NumPy – Used for data processing, cleaning, transformation, and dataset manipulation.
+
+•	Flask – Powers the local web interface for running predictions, showing explanations, and collecting user feedback.
+
+•	YAML – Stores the editable taxonomy configuration, allowing categories to be updated without modifying code.
+
+•	Matplotlib – Generates evaluation artifacts including the confusion matrix for model assessment.
+
+•	Chart.js – Renders feature contribution and explainability charts in the browser UI.
+
+•	HTML/CSS/Bootstrap – Builds the responsive and modern frontend layout for the user interface.
