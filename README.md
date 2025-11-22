@@ -47,32 +47,23 @@ The system includes:
 
 ## 3. System Architecture
 
-### 1. Dataset Generation and Ingestion
-Collects raw or synthetic transaction strings and stores them locally to build a customizable training dataset.
+•	Dataset Generation and Ingestion - Collects raw or synthetic transaction strings and stores them locally to build a customizable training dataset.
 
-### 2. Preprocessing & Vectorization 
-Cleans input text and converts it into TF-IDF numerical vectors that the ML model can understand.
+•	Preprocessing & Vectorization - Cleans input text and converts it into TF-IDF numerical vectors that the ML model can understand.
 
-### 3. Model Training 
-Uses a Linear SVM classifier to learn patterns and boundaries between transaction categories.
+•	 Model Training - Uses a Linear SVM classifier to learn patterns and boundaries between transaction categories.
 
-### 4. Evaluation 
-Produces confusion matrices and F1-score reports to measure classification performance and ensure transparency.
+•	Evaluation - Produces confusion matrices and F1-score reports to measure classification performance and ensure transparency.
 
-### 5. Explainability 
-Extracts feature importance signals from model coefficients to show why a prediction was made.
+•	Explainability - Extracts feature importance signals from model coefficients to show why a prediction was made.
 
-### 6. Inference API 
-A Flask-based prediction endpoint that returns real-time category and confidence scores.
+•	Inference API - A Flask-based prediction endpoint that returns real time category and confidence scores.
 
-### 7. Local Web UI 
-A browser interface enabling users to categorize transactions, view explanations, and interact with the system.
+•	Local Web UI - A browser interface enabling users to categorize transactions, view explanations, and interact with the system.
 
-### 8. Human Feedback Loop
-Stores user-corrected labels into feedback.csv to continuously refine and improve the model.
+•	 Human Feedback Loop - Stores user corrected labels into feedback.csv to continuously refine and improve the model.
 
-### 9. Retraining Capability 
-Allows new training sessions that incorporate user feedback, enabling adaptive and ever-improving performance.
+•	Retraining Capability - Allows new training sessions that incorporate user feedback, enabling adaptive and ever improving performance.
 
 ## 4. Data Model & Storage
 
@@ -107,4 +98,5 @@ Provides a visual representation of true vs. predicted categories for transparen
 ### 5. Evaluation Artifacts: classification_report.json
 
 Stores detailed per class precision, recall, and F1 metrics for reproducible evaluation and auditing.
+
 
