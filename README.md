@@ -144,7 +144,7 @@ python main.py --mode all --run-server
 
 ## 9. Demonstration Screenshots
 
-### Home / Landing Page
+### 1. Home / Landing Page
 
 Shows the introductory interface where users access the system, understand its purpose, and begin the transaction categorization workflow.
 
@@ -154,7 +154,7 @@ Shows the introductory interface where users access the system, understand its p
 <img width="1894" height="920" alt="Screenshot 2025-11-22 155819" src="https://github.com/user-attachments/assets/75242b21-b092-4f38-8aaf-af4a1c8371a8" />
 
 
-### Categorization Form
+### 2. Categorization Form
 
 Displays the input section where users enter raw transaction text to be analyzed and classified by the model.
 
@@ -163,6 +163,17 @@ Displays the input section where users enter raw transaction text to be analyzed
 
 <img width="1852" height="918" alt="Screenshot 2025-11-22 155846" src="https://github.com/user-attachments/assets/43bd3d73-5c45-4547-ac3a-a09dfb702974" />
 
+
+### 3. Prediction + Explainability + Feedback
+
+Presents the model’s predicted category, confidence score, explanation chart, and a feedback form enabling users to correct results for continuous learning.
+
+
+<img width="1738" height="925" alt="Screenshot 2025-11-22 155922" src="https://github.com/user-attachments/assets/311ef17c-45ad-4dc1-a3c6-0f0a45125c6c" />
+
+<img width="1739" height="739" alt="Screenshot 2025-11-22 155934" src="https://github.com/user-attachments/assets/94aa332a-ba10-46c7-8705-9f30ffa21b73" />
+
+<img width="1869" height="928" alt="Screenshot 2025-11-22 183358" src="https://github.com/user-attachments/assets/0dc85ef7-c6ca-4f6c-af6f-a8533ee08d96" />
 
 
 
