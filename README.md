@@ -99,4 +99,14 @@ Provides a visual representation of true vs. predicted categories for transparen
 
 Stores detailed per class precision, recall, and F1 metrics for reproducible evaluation and auditing.
 
+## 6. Security and Compliance
+•	100% local processing - All model operations run entirely on the user's device, ensuring full data ownership and eliminating external dependencies.
+
+•	No external APIs - The system does not send any transaction data to third party services, preventing API related privacy or security risks.
+
+•	No PII collected - The model handles generic transaction descriptions without storing or processing personally identifiable information.
+
+•	User feedback stored locally - Corrections provided by users are saved in a secure local CSV file, maintaining full control over learning data.
+
+•	Transparent explainability methods - Feature based explanations offer clear visibility into how each classification decision is made, supporting responsible AI practices.
 
