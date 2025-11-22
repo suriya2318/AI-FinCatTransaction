@@ -173,7 +173,7 @@ Presents the model’s predicted category, confidence score, explanation chart, 
 
 <img width="1739" height="739" alt="Screenshot 2025-11-22 155934" src="https://github.com/user-attachments/assets/94aa332a-ba10-46c7-8705-9f30ffa21b73" />
 
-<img width="1869" height="928" alt="Screenshot 2025-11-22 183358" src="https://github.com/user-attachments/assets/0dc85ef7-c6ca-4f6c-af6f-a8533ee08d96" />
+
 
 
 
