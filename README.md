@@ -140,5 +140,6 @@ python main.py --mode all --run-server
 
 ### Navigate to:
 
-- <a href= "http://localhost:8787"> </a> 
+- <a href= "http://localhost:8787"> Link </a> 
+
 
