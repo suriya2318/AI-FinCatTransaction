@@ -142,4 +142,9 @@ python main.py --mode all --run-server
 
 - <a href= "http://localhost:8787"> Link </a> 
 
+## 9. Demonstration Screenshots
+
+### Home / Landing Page
+Shows the introductory interface where users access the system, understand its purpose, and begin the transaction categorization workflow.
+
 
