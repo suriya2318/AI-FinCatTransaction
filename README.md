@@ -43,3 +43,26 @@ The system includes:
 •	Chart.js – Renders feature contribution and explainability charts in the browser UI.
 
 •	HTML/CSS/Bootstrap – Builds the responsive and modern frontend layout for the user interface.
+
+
+## 3. System Architecture (One-to-Two Line Explanations)
+
+### Dataset Generation and Ingestion – Collects raw or synthetic transaction strings and stores them locally to build a customizable training dataset.
+
+### Preprocessing & Vectorization – Cleans input text and converts it into TF-IDF numerical vectors that the ML model can understand.
+
+### Model Training – Uses a Linear SVM classifier to learn patterns and boundaries between transaction categories.
+
+### Evaluation – Produces confusion matrices and F1-score reports to measure classification performance and ensure transparency.
+
+### Explainability – Extracts feature importance signals from model coefficients to show why a prediction was made.
+
+### Inference API – A Flask-based prediction endpoint that returns real-time category and confidence scores.
+
+### Local Web UI – A browser interface enabling users to categorize transactions, view explanations, and interact with the system.
+
+### Human Feedback Loop – Stores user-corrected labels into feedback.csv to continuously refine and improve the model.
+
+### Retraining Capability – Allows new training sessions that incorporate user feedback, enabling adaptive and ever-improving performance.
+
+
