@@ -121,3 +121,7 @@ Stores detailed per class precision, recall, and F1 metrics for reproducible eva
 
 •	Config-driven design allows rapid onboarding of new categories - Administrators can update or expand taxonomy categories directly through YAML configuration without modifying any code.
 
+## 8. Running the Project
+
+### 1. Install Dependencies
+pip install -r requirements.txt
