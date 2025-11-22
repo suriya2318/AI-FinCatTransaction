@@ -125,3 +125,20 @@ Stores detailed per class precision, recall, and F1 metrics for reproducible eva
 
 ### 1. Install Dependencies
 pip install -r requirements.txt
+
+## 2. Train the Model
+python main.py --mode train
+
+### 3. Evaluate the Model
+python main.py --mode evaluate
+
+### 4. Start the Web Application
+python app.py
+
+### 5. start the entire server
+python main.py --mode all --run-server
+
+### Navigate to:
+
+- <a href= "http://localhost:8787"> </a> 
+
