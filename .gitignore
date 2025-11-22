@@ -35,3 +35,7 @@ Thumbs.db
 
 # Submission package
 submission_package/
+
+data/
+*.csv
+*.json
