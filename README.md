@@ -45,24 +45,34 @@ The system includes:
 •	HTML/CSS/Bootstrap – Builds the responsive and modern frontend layout for the user interface.
 
 
-## 3. System Architecture (One-to-Two Line Explanations)
+## 3. System Architecture
 
-### Dataset Generation and Ingestion – Collects raw or synthetic transaction strings and stores them locally to build a customizable training dataset.
+### 1. Dataset Generation and Ingestion
+Collects raw or synthetic transaction strings and stores them locally to build a customizable training dataset.
 
-### Preprocessing & Vectorization – Cleans input text and converts it into TF-IDF numerical vectors that the ML model can understand.
+### 2. Preprocessing & Vectorization 
+Cleans input text and converts it into TF-IDF numerical vectors that the ML model can understand.
 
-### Model Training – Uses a Linear SVM classifier to learn patterns and boundaries between transaction categories.
+### 3. Model Training 
+Uses a Linear SVM classifier to learn patterns and boundaries between transaction categories.
 
-### Evaluation – Produces confusion matrices and F1-score reports to measure classification performance and ensure transparency.
+### 4. Evaluation 
+Produces confusion matrices and F1-score reports to measure classification performance and ensure transparency.
 
-### Explainability – Extracts feature importance signals from model coefficients to show why a prediction was made.
+### 5. Explainability 
+Extracts feature importance signals from model coefficients to show why a prediction was made.
 
-### Inference API – A Flask-based prediction endpoint that returns real-time category and confidence scores.
+### 6. Inference API 
+A Flask-based prediction endpoint that returns real-time category and confidence scores.
 
-### Local Web UI – A browser interface enabling users to categorize transactions, view explanations, and interact with the system.
+### 7. Local Web UI 
+A browser interface enabling users to categorize transactions, view explanations, and interact with the system.
 
-### Human Feedback Loop – Stores user-corrected labels into feedback.csv to continuously refine and improve the model.
+### 8. Human Feedback Loop
+Stores user-corrected labels into feedback.csv to continuously refine and improve the model.
 
-### Retraining Capability – Allows new training sessions that incorporate user feedback, enabling adaptive and ever-improving performance.
+### 9. Retraining Capability 
+Allows new training sessions that incorporate user feedback, enabling adaptive and ever-improving performance.
+
 
 
