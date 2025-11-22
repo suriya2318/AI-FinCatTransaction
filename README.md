@@ -100,6 +100,7 @@ Provides a visual representation of true vs. predicted categories for transparen
 Stores detailed per class precision, recall, and F1 metrics for reproducible evaluation and auditing.
 
 ## 6. Security and Compliance
+
 •	100% local processing - All model operations run entirely on the user's device, ensuring full data ownership and eliminating external dependencies.
 
 •	No external APIs - The system does not send any transaction data to third party services, preventing API related privacy or security risks.
@@ -109,4 +110,14 @@ Stores detailed per class precision, recall, and F1 metrics for reproducible eva
 •	User feedback stored locally - Corrections provided by users are saved in a secure local CSV file, maintaining full control over learning data.
 
 •	Transparent explainability methods - Feature based explanations offer clear visibility into how each classification decision is made, supporting responsible AI practices.
+
+## 7. Scalability and Performance 
+
+•	Inference < 50ms locally - The model delivers near instant category predictions, enabling smooth real time usage even on modest hardware.
+
+•	Model size < 10 MB - A compact model footprint ensures fast loading, low memory usage, and easy deployment in local or embedded environments.
+
+•	Supports batch inference - The system can process multiple transactions in a single run, enabling scalable offline analysis or bulk categorization.
+
+•	Config-driven design allows rapid onboarding of new categories - Administrators can update or expand taxonomy categories directly through YAML configuration without modifying any code.
 
