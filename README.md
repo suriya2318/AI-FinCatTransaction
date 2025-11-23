@@ -362,11 +362,13 @@ Visualizing model performance across transaction categories True vs. Predicted c
 
 <img width="640" height="480" alt="confusion_matrix" src="https://github.com/user-attachments/assets/ed1db030-de51-4a98-9b88-0c03e93293f7" />
 
-## 10. Project Demo
+## 10. Project Demo Links
 
 ### Demo Video Link
 
 This section provides the recorded walkthrough of the complete system, demonstrating model training, evaluation, the web interface, prediction workflow, and the feedback loop in action. Add your final video link here once recorded.
+
+- <a href= "[http://localhost:8787](https://drive.google.com/file/d/14DW4waIJFwaa0tmUUWnLAfa6VmbHBiai/view?usp=drive_link)"> Link </a>
 
 ## 11. Final Conclusion
 
