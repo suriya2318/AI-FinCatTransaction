@@ -346,7 +346,7 @@ Displays the input section where users enter raw transaction text to be analyzed
 
 <img width="1893" height="927" alt="Screenshot 2025-11-22 155832" src="https://github.com/user-attachments/assets/e76308d1-d8aa-4b3d-a918-c4141cdcc316" />
 
-<img width="1852" height="918" alt="Screenshot 2025-11-22 155846" src="https://github.com/user-attachments/assets/43bd3d73-5c45-4547-ac3a-a09dfb702974" />
+<img width="1881" height="692" alt="Screenshot 2025-11-23 202105" src="https://github.com/user-attachments/assets/91cffa4d-9bf1-4233-970e-1b58bfbc16d3" />
 
 ### 3. Prediction + Explainability + Feedback
 
