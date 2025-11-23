@@ -162,15 +162,16 @@ Displays the input section where users enter raw transaction text to be analyzed
 
 <img width="1893" height="927" alt="Screenshot 2025-11-22 155832" src="https://github.com/user-attachments/assets/e76308d1-d8aa-4b3d-a918-c4141cdcc316" />
 
-<img width="1852" height="918" alt="Screenshot 2025-11-22 155846" src="https://github.com/user-attachments/assets/43bd3d73-5c45-4547-ac3a-a09dfb702974" />
+<img width="1881" height="692" alt="Screenshot 2025-11-23 202105" src="https://github.com/user-attachments/assets/f8fdced5-b284-42c6-bfd7-bc0647cc87c2" />
+
 
 ### 3. Prediction + Explainability + Feedback
 
 Presents the model’s predicted category, confidence score, explanation chart, and a feedback form enabling users to correct results for continuous learning.
 
-<img width="1738" height="925" alt="Screenshot 2025-11-22 155922" src="https://github.com/user-attachments/assets/311ef17c-45ad-4dc1-a3c6-0f0a45125c6c" />
+<img width="1880" height="929" alt="Screenshot 2025-11-23 202119" src="https://github.com/user-attachments/assets/a871acb8-3d47-4abd-b924-dc8fd26dc414" />
 
-<img width="1739" height="739" alt="Screenshot 2025-11-22 155934" src="https://github.com/user-attachments/assets/94aa332a-ba10-46c7-8705-9f30ffa21b73" />
+<img width="1882" height="859" alt="Screenshot 2025-11-23 202145" src="https://github.com/user-attachments/assets/2e559919-b6ba-4569-a211-170ce8141a67" />
 
 ## 10. Project Demo
 
