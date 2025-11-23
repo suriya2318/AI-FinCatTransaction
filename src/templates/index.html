@@ -778,39 +778,32 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
-      // Smooth scroll to features section
       function scrollToFeatures() {
         document.getElementById("features-section").scrollIntoView({
           behavior: "smooth",
         });
       }
-
-      // Show transaction form and hide simplified view
       function showTransactionForm() {
         document.getElementById("simplifiedView").style.display = "none";
         document.getElementById("transactionForm").style.display = "block";
         document.getElementById("emptyState").style.display = "block";
         document.getElementById("resultsSection").style.display = "none";
 
-        // Scroll to the form
         document.getElementById("categorizer-section").scrollIntoView({
           behavior: "smooth",
         });
       }
 
-      // Clear form and return to transaction form
       function clearForm() {
         document.getElementById("transactionInput").value = "";
         document.getElementById("emptyState").style.display = "block";
         document.getElementById("resultsSection").style.display = "none";
 
-        // Scroll to the form
         document.getElementById("categorizer-section").scrollIntoView({
           behavior: "smooth",
         });
       }
 
-      // Save correction and return to transaction form
       function saveCorrection() {
         const selectedCategory = document.querySelector(
           'select[name="label_select"]'
@@ -821,31 +814,25 @@
           return;
         }
 
-        // Here you would typically send the correction to your backend
-        // For now, we'll just show a success message and return to the form
         alert(
           "Correction saved successfully! The model will learn from this feedback."
         );
 
-        // Clear the form and return to transaction entry
         document.getElementById("transactionInput").value = "";
         document.getElementById("emptyState").style.display = "block";
         document.getElementById("resultsSection").style.display = "none";
         document.getElementById("simplifiedView").style.display = "none";
         document.getElementById("transactionForm").style.display = "block";
 
-        // Scroll to the form
         document.getElementById("categorizer-section").scrollIntoView({
           behavior: "smooth",
         });
       }
 
-      // Generate feature analysis based on transaction text
       function generateFeatureAnalysis(transactionText) {
         const words = transactionText.toUpperCase().split(/\s+/);
         const features = [];
 
-        // Common transaction patterns with more diverse categories
         const commonPatterns = {
           STARBUCKS: { score: 0.2456, category: "Food & Dining" },
           COFFEE: { score: 0.2156, category: "Food & Dining" },
@@ -876,7 +863,6 @@
           AIRLINE: { score: 0.2987, category: "Travel" },
         };
 
-        // Check for specific keywords
         for (const [keyword, data] of Object.entries(commonPatterns)) {
           if (transactionText.toUpperCase().includes(keyword)) {
             features.push({
@@ -887,21 +873,18 @@
           }
         }
 
-        // Add length feature
         features.push({
           name: `Length: ${transactionText.length} chars`,
           score: 0.05 + transactionText.length * 0.001,
           category: "General",
         });
 
-        // Add word count feature
         features.push({
           name: `Word count: ${words.length}`,
           score: 0.03 + words.length * 0.005,
           category: "General",
         });
 
-        // Add special characters feature
         const specialChars = transactionText.replace(/[a-zA-Z0-9\s]/g, "");
         if (specialChars.length > 0) {
           features.push({
@@ -911,7 +894,6 @@
           });
         }
 
-        // Add numbers feature
         const numbers = transactionText.match(/\d+/g);
         if (numbers) {
           features.push({
@@ -921,11 +903,9 @@
           });
         }
 
-        // Sort by score (highest first) and take top 5
         return features.sort((a, b) => b.score - a.score).slice(0, 5);
       }
 
-      // Handle form submission
       document
         .getElementById("transactionFormElement")
         .addEventListener("submit", function (e) {
@@ -939,21 +919,16 @@
             return;
           }
 
-          // Update the results with the transaction text
           document.getElementById("inputDisplay").textContent = transactionText;
 
-          // IMPORTANT: set hidden input in feedback form so server receives the transaction text
           const fbHidden = document.querySelector(
             'form#feedbackForm input[name="transaction"]'
           );
           if (fbHidden) {
             fbHidden.value = transactionText;
           }
-
-          // Generate feature analysis based on the transaction
           const features = generateFeatureAnalysis(transactionText);
 
-          // Determine the most likely category based on features
           const categoryScores = {};
           features.forEach((feature) => {
             if (feature.category !== "General") {
@@ -971,9 +946,7 @@
             }
           }
 
-          // If no specific category found, use a more intelligent default
           if (predictedCategory === "Other" && features.length > 0) {
-            // Check for common patterns in the transaction text
             const transactionUpper = transactionText.toUpperCase();
             if (
               transactionUpper.includes("COFFEE") ||
@@ -994,7 +967,6 @@
             ) {
               predictedCategory = "Utilities";
             } else {
-              // Use a random category instead of always defaulting to Shopping
               const categories = [
                 "Food & Dining",
                 "Shopping",
@@ -1009,9 +981,8 @@
             }
           }
 
-          const randomConfidence = (Math.random() * 0.4 + 0.6).toFixed(3); // Between 0.6 and 1.0
+          const randomConfidence = (Math.random() * 0.4 + 0.6).toFixed(3);
 
-          // Update prediction results
           document.getElementById("predictionBadge").textContent =
             predictedCategory;
           document.getElementById("confidenceValue").textContent = `${(
@@ -1021,7 +992,6 @@
             randomConfidence * 100
           }%`;
 
-          // Update stats
           document.getElementById("totalFeatures").textContent =
             features.length;
           document.getElementById("modelConfidence").textContent = `${(
@@ -1030,7 +1000,6 @@
           document.getElementById("categoryValue").textContent =
             predictedCategory;
 
-          // Update feature contributions list
           const featureList = document.getElementById("featureList");
           featureList.innerHTML = "";
           features.forEach((feature) => {
@@ -1043,35 +1012,28 @@
             featureList.appendChild(li);
           });
 
-          // Show results and hide empty state
           document.getElementById("emptyState").style.display = "none";
           document.getElementById("resultsSection").style.display = "block";
 
-          // Scroll to results
           setTimeout(() => {
             document.getElementById("resultsSection").scrollIntoView({
               behavior: "smooth",
             });
           }, 100);
 
-          // Update chart with new data
           updateChart(features);
         });
 
-      // Update chart with feature data
       function updateChart(features) {
         const ctx = document.getElementById("explainChart").getContext("2d");
 
-        // Prepare data for chart
         const labels = features.map((f) => f.name);
         const scores = features.map((f) => f.score);
 
-        // Destroy existing chart if it exists
         if (window.explainChartInstance) {
           window.explainChartInstance.destroy();
         }
 
-        // Create new chart
         window.explainChartInstance = new Chart(ctx, {
           type: "bar",
           data: {
@@ -1124,9 +1086,7 @@
         });
       }
 
-      // Initialize the page
       window.addEventListener("DOMContentLoaded", function () {
-        // Hide empty state and results initially
         document.getElementById("emptyState").style.display = "none";
         document.getElementById("resultsSection").style.display = "none";
       });

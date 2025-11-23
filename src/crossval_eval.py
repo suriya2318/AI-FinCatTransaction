@@ -1,4 +1,3 @@
-# src/crossval_eval.py
 import pandas as pd
 from sklearn.pipeline import make_pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer

@@ -1,5 +1,3 @@
-# main.py — integrated pipeline runner with ingest, preprocessing, training, evaluation, and UI server
-
 import argparse
 import subprocess
 

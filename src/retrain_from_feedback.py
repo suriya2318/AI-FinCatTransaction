@@ -1,4 +1,3 @@
-# src/retrain_from_feedback.py
 import pandas as pd
 import os
 from src.preprocess import load_and_process, normalize_text
@@ -11,12 +10,10 @@ MERGED_FILE = "data/processed/merged_for_retrain.csv"
 
 def merge_and_retrain():
     if not os.path.exists(PROCESSED_FILE):
-        # run preprocessing to produce it
         print("Processed file not found. Running preprocessing...")
         load_and_process()
 
     base = pd.read_csv(PROCESSED_FILE)
-    # normalize to columns text,label
     if "text" in base.columns:
         base_df = base[["text", "label"]].dropna(subset=["label"])
     elif "transaction" in base.columns:
@@ -42,8 +39,6 @@ def merge_and_retrain():
     os.makedirs(os.path.dirname(MERGED_FILE), exist_ok=True)
     merged.to_csv(MERGED_FILE, index=False)
     print(f"Merged dataset saved to {MERGED_FILE} (rows={len(merged)})")
-
-    # Retrain using the train function, passing the merged file
     train(input_csv=MERGED_FILE)
     print("Retraining complete. Model updated.")
 

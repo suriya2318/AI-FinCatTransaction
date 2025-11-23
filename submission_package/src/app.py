@@ -1,4 +1,3 @@
-# src/app.py
 import sys, os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -14,10 +13,8 @@ FEEDBACK_FILE = "data/feedback/feedback.csv"
 os.makedirs(os.path.dirname(FEEDBACK_FILE), exist_ok=True)
 
 
-# Helper to get list of category ids and display names
 def get_categories():
     cats = load_taxonomy()
-    # return list of tuples (id, display_name)
     return [(c["id"], c.get("display_name", c["id"])) for c in cats]
 
 
@@ -26,15 +23,12 @@ def index():
     categories = get_categories()
     if request.method == "POST":
         text = request.form.get("transaction", "").strip()
-        # Save feedback if present via dropdown
         if "save" in request.form:
             label = request.form.get("label_select") or request.form.get("label") or ""
             with open(FEEDBACK_FILE, "a", newline="", encoding="utf8") as f:
                 writer = csv.writer(f)
                 writer.writerow([text, label])
             return redirect(url_for("index"))
-
-        # Prediction flow
         alias_cat, method = alias_lookup(text)
         if alias_cat and method == "token":
             pred = alias_cat
@@ -42,8 +36,6 @@ def index():
             expl = [("alias_match", 0.99)]
         else:
             pred, conf, expl = explain_text(text)
-
-        # Normalize explanation list into feature/score floats
         norm_expl = []
         for item in expl or []:
             try:

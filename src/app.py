@@ -1,8 +1,6 @@
-# src/app.py
 import sys
 import os
 
-# allow imports like `from src.infer import predict`
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from flask import Flask, request, render_template, redirect, url_for
@@ -33,9 +31,7 @@ def index():
     if request.method == "POST":
         text = request.form.get("transaction", "").strip()
 
-        # --- Save feedback flow ---
         if "save" in request.form:
-            # prefer dropdown value (category id) else free-text label
             posted_label = (
                 request.form.get("label_select")
                 or request.form.get("label")
@@ -43,8 +39,6 @@ def index():
                 or ""
             )
             posted_label = posted_label.strip()
-
-            # Map posted label/display name to canonical id if possible
             taxonomy = load_taxonomy()
             id_set = {c["id"] for c in taxonomy}
             display_to_id = {
@@ -52,8 +46,6 @@ def index():
             }
 
             label_to_write = posted_label
-
-            # If numeric legacy index provided, map to categories list
             if label_to_write.isdigit():
                 try:
                     idx = int(label_to_write) - 1
@@ -61,24 +53,15 @@ def index():
                         label_to_write = categories[idx][0]
                 except Exception:
                     pass
-
-            # If user submitted display name, map to id
             if label_to_write and label_to_write not in id_set:
                 low = label_to_write.lower()
                 if low in display_to_id:
                     label_to_write = display_to_id[low]
-
-            # Persist transaction text and canonical label id (or free text if unmatched)
             with open(FEEDBACK_FILE, "a", newline="", encoding="utf8") as f:
                 writer = csv.writer(f)
                 writer.writerow([text, label_to_write])
-
-            # After saving return to entry (GET index) so user can add next transaction
             return redirect(url_for("index"))
-
-        # --- Prediction flow ---
         if not text:
-            # nothing to predict — just reload
             return redirect(url_for("index"))
 
         out = predict([text], top_k=5)[0]
@@ -86,8 +69,6 @@ def index():
         conf = out.get("conf", 0.0)
         candidates = out.get("candidates", [])
         alias_override = out.get("alias_override")
-
-        # Explainability: expect explain_text to return list[(feat, score)] or (pred, conf, expl_list)
         expl = []
         try:
             maybe = explain_text(text)
@@ -100,13 +81,10 @@ def index():
             ):
                 expl = maybe[2]
             else:
-                # try to coerce if possible
                 if hasattr(maybe, "__iter__"):
                     expl = list(maybe)
         except Exception:
             expl = []
-
-        # normalize explanation entries into (feature, float_score)
         norm_expl = []
         for item in expl or []:
             try:
@@ -119,8 +97,6 @@ def index():
 
         chart_labels = [f for f, s in norm_expl]
         chart_scores = [s for f, s in norm_expl]
-
-        # Render results template (index.html expects these variables)
         return render_template(
             "index.html",
             text=text,
@@ -133,8 +109,6 @@ def index():
             candidates=candidates,
             alias_override=alias_override,
         )
-
-    # GET request: show entry form
     return render_template(
         "index.html", categories=categories, chart_labels=[], chart_scores=[]
     )

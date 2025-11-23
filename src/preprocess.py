@@ -1,4 +1,3 @@
-# src/preprocess.py
 import pandas as pd
 import re
 import unicodedata
@@ -10,8 +9,8 @@ def normalize_text(s):
     s = str(s)
     s = unicodedata.normalize("NFKD", s)
     s = s.lower()
-    s = re.sub(r"\d{4,}", " <NUM> ", s)  # mask long numbers
-    s = re.sub(r"[\W_]+", " ", s)  # remove punctuation
+    s = re.sub(r"\d{4,}", " <NUM> ", s)
+    s = re.sub(r"[\W_]+", " ", s)
     s = re.sub(r"\s+", " ", s).strip()
     return s
 

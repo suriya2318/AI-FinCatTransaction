@@ -1,16 +1,8 @@
-# Responsible AI & Bias Mitigation
-
-## Objective
-
 Ensure the categorisation system is fair, transparent, and safe for users.
-
-## Potential bias vectors
 
 - **Merchant distribution bias**: Over-representation of major merchants (e.g., Amazon) may bias classifier toward those categories.
 - **Regional naming conventions**: Merchant strings vary by region/language; model trained on one region may underperform in another.
 - **Amount-based leakage**: If amounts are provided and correlated with categories, careful handling is required.
-
-## Mitigations implemented
 
 - **Taxonomy aliasing** reduces misclassification via high-precision token lookups for common merchants.
 - **Char n-gram features** increase robustness to noisy/misspelled merchant strings.
@@ -19,13 +11,9 @@ Ensure the categorisation system is fair, transparent, and safe for users.
 - **PII masking**: Long numeric sequences masked during preprocessing (`src/preprocess.py`).
 - **Transparent explanations**: SHAP-based feature contributions shown in UI to explain decisions.
 
-## Tests performed
-
 - Confusion matrix inspection for per-class performance.
 - Manual checks on noisy input examples (truncated names, added tokens).
 - Reproducibility: deterministic seeds (42) for experiments.
-
-## Recommendations for production
 
 - Expand dataset coverage across geographies and merchant types.
 - Provide user-facing disclaimers for ambiguous transactions.

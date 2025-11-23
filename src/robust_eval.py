@@ -24,14 +24,9 @@ def merchant_proxy(text):
 def run_merchant_split_eval(
     processed_csv="data/processed/processed.csv", random_state=42
 ):
-    # Ensure output dirs
     os.makedirs("artifacts/metrics", exist_ok=True)
     os.makedirs("artifacts/checkpoints", exist_ok=True)
-
-    # Load data
     df = pd.read_csv(processed_csv)
-
-    # Ensure required columns
     if "text" not in df.columns:
         if "transaction" in df.columns:
             df = df.rename(columns={"transaction": "text"})
@@ -40,11 +35,8 @@ def run_merchant_split_eval(
     if "label" not in df.columns:
         raise ValueError("Missing 'label' column in input CSV.")
 
-    # Group by merchant proxy (first token)
     df["merchant_proxy"] = df["text"].apply(merchant_proxy)
     print("Unique merchant proxies:", df["merchant_proxy"].nunique())
-
-    # Group-based split
     gss = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=random_state)
     train_idx, test_idx = next(gss.split(df, groups=df["merchant_proxy"]))
     train = df.iloc[train_idx]
@@ -55,7 +47,6 @@ def run_merchant_split_eval(
     X_test = test["text"].astype(str)
     y_test = test["label"].astype(str)
 
-    # Model pipeline
     pipe = make_pipeline(
         TfidfVectorizer(ngram_range=(1, 2), analyzer="char_wb", max_features=5000),
         LogisticRegression(
@@ -64,8 +55,6 @@ def run_merchant_split_eval(
     )
     pipe.fit(X_train, y_train)
     y_pred = pipe.predict(X_test)
-
-    # Classification report (console + JSON)
     print("=== Merchant-group split evaluation ===")
     report_dict = classification_report(
         y_test, y_pred, output_dict=True, zero_division=0
@@ -76,11 +65,8 @@ def run_merchant_split_eval(
         "artifacts/metrics/classification_report.json", "w", encoding="utf-8"
     ) as f:
         json.dump(report_dict, f, indent=2, ensure_ascii=False)
-    print(
-        "✅ Saved classification report to artifacts/metrics/classification_report.json"
-    )
+    print("Saved classification report to artifacts/metrics/classification_report.json")
 
-    # Confusion matrix (only for labels present in test)
     labels_in_test = [label for label in pipe.classes_ if label in set(y_test)]
     if labels_in_test:
         cm = confusion_matrix(y_test, y_pred, labels=labels_in_test)
@@ -94,13 +80,12 @@ def run_merchant_split_eval(
         out_path = "artifacts/metrics/confusion_matrix.png"
         plt.savefig(out_path, dpi=150)
         plt.close(fig)
-        print(f"✅ Saved confusion matrix to {out_path}")
+        print(f"Saved confusion matrix to {out_path}")
     else:
-        print("⚠️ No labels in test set match model classes. Skipping confusion matrix.")
+        print("No labels in test set match model classes. Skipping confusion matrix.")
 
-    # Save model
     joblib.dump(pipe, "artifacts/checkpoints/merchant_split.joblib")
-    print("✅ Saved model to artifacts/checkpoints/merchant_split.joblib")
+    print("Saved model to artifacts/checkpoints/merchant_split.joblib")
 
 
 if __name__ == "__main__":

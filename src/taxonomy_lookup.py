@@ -1,4 +1,3 @@
-# src/taxonomy_lookup.py
 import yaml
 import re
 from functools import lru_cache
@@ -14,7 +13,6 @@ def load_taxonomy(path="configs/taxonomy.yaml"):
     cats = raw.get("categories") or []
     for c in cats:
         c["display_name"] = c.get("display_name", c.get("id"))
-        # normalize aliases to lowercase strings
         c["aliases_norm"] = [str(a).lower() for a in c.get("aliases", []) if a]
     return cats
 
@@ -41,14 +39,10 @@ def alias_lookup(text):
 
     tokens = re.split(r"\W+", text_l)
     cats = load_taxonomy()
-
-    # token exact matches (best)
     for c in cats:
         for a in c["aliases_norm"]:
             if a and a in tokens:
                 return c["id"], "token", a
-
-    # substring matches (fallback)
     for c in cats:
         for a in c["aliases_norm"]:
             if a and a in text_l:

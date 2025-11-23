@@ -1,4 +1,3 @@
-# src/feedback.py
 import csv, os
 from src.infer import predict
 from src.taxonomy_lookup import get_all_categories
@@ -9,7 +8,6 @@ os.makedirs(os.path.dirname(FEEDBACK_FILE), exist_ok=True)
 
 def cli():
     cats = get_all_categories()
-    # print menu
     print("Categories:")
     for i, (cid, cname) in enumerate(cats, start=1):
         print(f"{i}. {cname} ({cid})")

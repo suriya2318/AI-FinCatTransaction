@@ -2,14 +2,10 @@ import pandas as pd
 import os
 from glob import glob
 
-# Purpose: Consolidate multiple raw CSV files with potentially different schemas
-# into a single canonical CSV with columns: transaction, merchant (opt), amount (opt), label (optional).
-
 CANONICAL_COLS = ["transaction", "merchant", "amount", "label"]
 
 
 def canonicalize_row(row):
-    # row: pd.Series from an arbitrary CSV. Try to map known column names to canonical.
     mapping = {}
     text_candidates = ["transaction", "description", "memo", "notes", "text"]
     merchant_candidates = ["merchant", "vendor", "payee"]
@@ -48,7 +44,6 @@ def ingest_folder(folder="data/raw", out="data/raw/canonical_transactions.csv"):
         for _, r in df.iterrows():
             mapped = canonicalize_row(r)
             if "transaction" not in mapped:
-                # try to build from merchant + other columns
                 mapped["transaction"] = " ".join(
                     str(v)
                     for v in [r.get("merchant", ""), r.get("description", "")]
